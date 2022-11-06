@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block app_context %}
+<div class="row">
+    <div class="col-md-12">
+        <!-- Flash message -->
+        {% include '_flash_message.html' %}
+        <!-- End of flash message -->
+        <h1>{{ title }}</h1>
+    </div>  
+</div>
+{% endblock %}

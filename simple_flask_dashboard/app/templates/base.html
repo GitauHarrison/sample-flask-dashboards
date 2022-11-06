@@ -1,0 +1,188 @@
+{% extends 'bootstrap/base.html' %}
+
+{% block title %}
+    {% if title %}
+        {{ title }} | Dashboard
+    {% else %} 
+        Test | Dashboard
+    {% endif %}
+{% endblock %}
+
+{% block styles %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+{% endblock %}
+
+{% block navbar %}
+    {% if current_user.is_authenticated %}
+        <nav class="navbar-default">
+            <div>
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="{{ url_for('profile') }}">somaSoma</a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">         
+                    <ul class="nav navbar-nav navbar-right">  
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href=" # " id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Courses
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href=" # ">Flask</a><br>
+                                <hr>
+                                <a class="dropdown-item disabled" href="#">Data Science</a>
+                            </div>
+                        </li>
+                        <li><a href=" # ">Events</a></li> 
+                        <li><a href=" # ">Blog</a></li>
+                        <li><a href=" {{ url_for('logout') }} ">Logout</a></li>
+                    </ul>                       
+                </div>
+            </div>
+        </nav>
+    {% else %}
+        <nav class="navbar-default">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="{{ url_for('profile') }}">somaSoma</a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">         
+                    <ul class="nav navbar-nav navbar-right">  
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href=" # " id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Courses
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href=" # ">Flask</a><br>
+                                <hr>
+                                <a class="dropdown-item disabled" href="#">Data Science</a>
+                            </div>
+                        </li>
+                        <li><a href=" # ">Events</a></li> 
+                        <li><a href=" # ">Blog</a></li>
+                        <li><a href=" {{ url_for('login') }} ">Login</a></li>
+                    </ul>                       
+                </div>
+            </div>
+        </nav>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% if current_user.is_authenticated %}
+        <div class="tab tab-content">
+            <!-- Flash message -->
+            {% with messages = get_flashed_messages() %}              
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-success" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            <!-- End Flash message -->
+
+            <!-- Sidebar -->
+            <div class="row">
+                <div class="col-sm-2 sidebar">
+                    <div class="mini-submenu">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </div>
+                    <div class="list-group">
+                        <a href=" {{ url_for('profile') }} " class="list-group-item tablinks" onclick="openCity(event, 'profile')" id="defaultOpen">
+                            Profile
+                        </a>
+                        <a href=" {{ url_for('publishing') }} " class="list-group-item tablinks" onclick="openCity(event, 'publishing')">
+                            Publishing
+                        </a>
+                        <a href=" {{ url_for('moderation') }} " class="list-group-item tablinks" onclick="openCity(event, 'moderation')">
+                            Moderation
+                        </a>
+                        <a href=" {{ url_for('analytics') }} " class="list-group-item tablinks" onclick="openCity(event, 'analytics')">
+                            Analytics
+                        </a>
+                    </div>   
+                </div>
+
+                <div class="col-sm-10 ">
+                    {% block app_content %}
+
+                    {% endblock %}
+                </div>
+            </div>
+            <!-- End of sidebar -->
+
+            
+        </div>
+    {% else %}
+        <div class="container">
+            <!-- Flash message -->
+            {% with messages = get_flashed_messages() %}              
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-success" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            <!-- End Flash message -->
+
+            {% block user_app_content %}
+
+            {% endblock %}
+        </div>
+    {% endif %}
+
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script>
+        function openCity(evt, cityName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(cityName).style.display = "block";
+        evt.currentTarget.className += " active";
+        }
+
+        
+    </script>
+    <script>
+        $(function(){
+
+            $('#defaultOpen').on('click',function() {			        
+                $(this).closest('.list-group').fadeOut('slide',function(){
+                    $('.mini-submenu').fadeIn();	
+                });
+                
+            });
+
+            $('.mini-submenu').on('click',function(){		
+                $(this).next('.list-group').toggle('slide');
+                $('.mini-submenu').hide();
+            })
+            });
+    </script>
+{% endblock %}
